@@ -1,0 +1,5 @@
+"0",""
+"0","PBC <- readRDS(""~/PBPS/Data/pblupusds2.rds"")"
+"0","PBPSC  <- readRDS(""~/PBPS/Data/pbps10rep.rds"")"
+"0","hkGagnon <- read.csv(paste0(path,""/Genes_Gagnon.txt""), sep="""")"
+"0",""
