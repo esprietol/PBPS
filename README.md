@@ -18,5 +18,5 @@ The pseudosamples are used as negative control samples in the RUVIII method and 
 
 + `R/`: Contains the scripts with the auxiliary functions and the differential expression simulations.
 + `Vignettes/`: Contains the vignettes about data wrangling, the PBPS function and the normalization comparisons between other RUV methods and the RUVIII PBPS method. 
-+ `ISCB/`: Contains the Rmarkdown files and the graphs used in the vignettes.
-+ `Data/`: Has the list of negative control genes used for the analyses.
++ `ISCB/`: Contains the Rmarkdown files with a tab structure for a better visualization.
++ `Data/`: Contains the list of negative control genes used for the analyses.
