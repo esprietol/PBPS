@@ -12,7 +12,7 @@ PBPS is a method developed to use RUVIII in pseudobulk analyses of single cell R
  
 ![](ISCB/figure-readme/pbpsdesc.png)<!-- -->
 
-The pseudosamples are used as negative control samples in the RUVIII method and have been particularly useful in normalizing datasets.
+The pseudosamples are used as negative control samples in the RUVIII method, its inclusion has been particularly useful in normalizing datasets.
 
 ## Directory structure
 
