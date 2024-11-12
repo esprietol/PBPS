@@ -60,7 +60,7 @@ PBPSC  <- readRDS("~/PBPS/Data/pbps10rep_ds2.rds")
 The following analysis uses the *[negative control genes](https://www.worldscientific.com/doi/abs/10.1142/S0219720020400041)* proposed by _Deeke and Gagnon-Bartsch_. We remove from the negative control genes set the genes with a standardized variance higher than 1.8.
 
 ```{r NCG}
-hkGagnon <- read.csv(paste0(path,"/Genes_Gagnon.txt"), sep="")
+hkGagnon <- read.csv("~/PBPS/Data/Genes_Gagnon.txt", sep="")
 hkGagnon <- unlist(hkGagnon)
 filter.vst <- FindVariableFeatures(PBC$counts, selection.method = 'vst')
 top_high_regvarg<-rownames(arrange(filter.vst,-variance))[1:500]
@@ -72,7 +72,7 @@ hk.ind <- rownames(PBC) %in% hkGagnon[-high_varg]
 
 ```
 
-## Assigning the mock treatment
+## Assigning mock treatment
 
 We randomly assign a mock treatment with 2 levels to later test for differential expression.
 
@@ -206,7 +206,7 @@ histT <- function (y,w,samples){
 
 Before using any normalization method, we observe a strong effect associated with the processing cohort in all cell types. The differences between the RLE across samples is not high, but the silhouette coefficients are, as well as the clustering effects in the first 2 principal components. Most of the p-values histograms are roughly homogeneous, indicating no confounding effect between the processing cohorts and the mock treatment.
 
-```{r raw data, results='hide',echo=FALSE} 
+```{r raw data, results='hide',include=FALSE} 
 
 ys.ct <- lapply(celltypes,split.ct,PBC=PBC)
 
@@ -236,7 +236,7 @@ Hists <- lapply(ys.ct,histpvals)
 ```
 
 
-```{r rawplots , results='asis',echo=FALSE}
+```{r rawplots , results='asis',include=FALSE}
 
 for (i in 1:length(celltypes)){
   
@@ -256,7 +256,7 @@ for (i in 1:length(celltypes)){
 we attempted to estimate the processing cohort effect directly and subtract it from the data in order to reduce technical variation. However, this approach alone can actually introduce technical noise in the genes where there was no strong processing cohort effect. As a result we have worse PCA and RLE plots for most cell types. 
 
 
-```{r pc, results = 'hide', echo=FALSE}
+```{r pc, results = 'hide', include=FALSE}
 
 normpc <- function(y){
   logy <- edgeR::cpm(y,log=T)
@@ -309,7 +309,7 @@ Hists <- lapply(ys.ct,histpc)
   
 ```
 
-```{r PCplots , results='asis', echo=FALSE}
+```{r PCplots , results='asis', include=FALSE}
 
 for (i in 1:length(celltypes)){
   
@@ -336,7 +336,7 @@ The RUV2 method uses solely the negative control genes to estimate the unwanted 
 Here we observe a lower average silhouette coefficient (but not bellow 0), and similar distributions in the RLE plots, indicating the removal of the technical noise associated with the processing cohorts. One issue observed with RUV2 was its inability to properly normalize the control sample, which resulted in it appearing as an outlier in the PCA plots of some cell types. This suggests that the method still has room for improvement. 
 
 
-```{r T2 RUV2, results='hide', echo=FALSE}
+```{r T2 RUV2, results='hide', include=FALSE}
 k=5
 
 ruv2T2 <- mapply(RUV2mod, Y = lapply(logys.ct,t), X = map(ys.ct,\(x) x$samples$fk.tr), ctl =  lapply(ys.ct, function (x) rownames(x) %in% hkGagnon[-high_varg]), k= as.list(rep(k,length(celltypes))), SIMPLIFY=F)
@@ -368,7 +368,7 @@ HistsT22 <- mapply(histT,y=ys.ct,w=map(ruv2T2,"W"),map(ys.ct,'samples'),SIMPLIFY
 
 
 
-```{r ruv2T2plots , results='asis',iecho=FALSE}
+```{r ruv2T2plots , results='asis',include=FALSE}
 
 for (i in 1:length(celltypes)){
   
@@ -392,7 +392,7 @@ The RUVIII method uses both negative control genes and negative control samples 
 The dataset has technical replicates mostly between the processing cohorts 2 and 3, therefore it was expected to observe the removal of technical noise mainly between those two sets. Therefore the inclusion of PBPS is relevant to capture the technical noise from all processing cohorts.
 
 
-```{r T2 RUV3, results='hide', echo=FALSE}
+```{r T2 RUV3, results='hide', include=FALSE}
 
 Mcts.ct <- lapply (ys.ct, function(x){
   Mct <- replicate.matrix(x$samples$ind_cov)
@@ -429,7 +429,7 @@ HistsT23 <- mapply(histT,y=ys.ct,w=map(ruv3T2,"W"),map(ys.ct,'samples'),SIMPLIFY
 
 
 
-```{r ruv3T2plots , results='asis', echo=FALSE}
+```{r ruv3T2plots , results='asis', include=FALSE}
 
 for (i in 1:length(celltypes)){
   
@@ -454,7 +454,7 @@ The RUV4 method increases the false discovery rate in the samples from T4 and NK
 
 #### Code
 
-```{r T2 RUV4, results='hide',echo=FALSE}
+```{r T2 RUV4, results='hide'}
 
 ruv4T2 <- mapply(RUV4mod, Y = lapply(logys.ct,t), X = map(ys.ct,\(x) x$samples$fk.tr), ctl =  lapply(ys.ct, function (x) rownames(x) %in% hkGagnon[-high_varg]), k= as.list(rep(k,length(celltypes))), SIMPLIFY=F)
 
@@ -484,7 +484,7 @@ HistsT24 <- mapply(histT,y=ys.ct,w=map(ruv4T2,"W"),map(ys.ct,'samples'),SIMPLIFY
 ```
 
 
-```{r ruv4T2plots , results='asis',echo=FALSE}
+```{r ruv4T2plots , results='asis'}
 
 for (i in 1:length(celltypes)){
   
@@ -555,7 +555,7 @@ Histsps <- mapply(histT,y=ys.ct,w=W,map(ys.ct,'samples'),SIMPLIFY = F)
 ```
 
 
-```{r ruvpbps plots , results='asis', echo=FALSE}
+```{r ruvpbps plots , results='asis', include=FALSE}
 
 for (i in 1:length(celltypes)){
   

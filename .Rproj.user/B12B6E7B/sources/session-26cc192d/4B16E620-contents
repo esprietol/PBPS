@@ -1,0 +1,23 @@
+---
+title: "RUV Differential Expression"
+output: github_document
+---
+
+# Problem description
+
+The single cell RNA Sequencing dataset used in the *[paper](https://www.science.org/doi/10.1126/science.abf1970)* from _Perez et. al._, available at GEO accession number GSE174188 has a strong technical effect linked to the cohorts where the samples were processed. This processing cohort effect introduces unwanted variation that can obscure the biological signals of interest.To address this issue, evaluate the effectiveness of RUV methods (RUV2, RUVIII, RUV4) to identify differentially expressed genes by including the unwanted factors *W* -source of the unwanted variation- in the analyses. Additionally, we included a fourth approach for comparison: the direct inclussion of the processing cohort effect..
+
+# Simulation of differential gene expresion
+
+To simulate differential gene expression (DGE), we start with relatively uniform samples from multiple subjects for which we create a mock treatment variable with two possible values, "A", and "B", and randomly assign the values to the subjects. Next, we randomly swap the gene expression values of $10\%$ of the genes, but only for the samples from the group "A". This simulation strategy has been previously proposed _Malfait et. al._, and implemented in the R package *[swapper](https://github.com/milanmlft/swapper)*. It creates a differential gene expression signal of different magnitudes between the treatment groups and retains the correlation structure from the original data, as well as the unwanted variation that we intend to remove.
+
+We switch different genes per cell type and assign the mock treatment with equal and unequal probabilities to subjects from different batches/processing cohorts; when the mock treatment is assigned with equal probabilities, we refer to it as a balanced design, and in the other case, we refer to it as an unbalanced design. The idea behind the unbalanced design is to generate a confounding effect between the batch/processing cohort and the mock treatment; in this design, the subjects from the processing cohort $4$ had a $90\%$ probability of receiving the mock treatment A.
+
+# Benchmarking tools
+
+For each simulated dataset, a differential gene expression method is applied, resulting in 100 sets of $G$ p-values. We compute the true False Discovery Rate (FDR) and the True Positive Rate (TPR) for three nominal False Discovery Rate values: 0.1, 0.05 and 0.01, and visualise the results.
+
+We demonstrate that the inclusion of pseudobulk pseudosamples (PBPS) in the RUVIII method outperforms other methods (including the direct removal of the Processing cohort effect) to reduce the unwanted variation in the normalized datasets.
+
+
+# Analysis
