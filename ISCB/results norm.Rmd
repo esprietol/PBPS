@@ -267,7 +267,7 @@ normpc <- function(y){
   v <- voom(y, design, plot=F) 
   vfit <- lmFit(v, design)
   alpha <- vfit$coefficients[,paste0('Proc', 2:4)] # same coefficients as efit and returned by toptable
-  newY <- logy - t(design[,paste0('Proc', 2:4)]%*%t(alpha))
+  newY <- v$E - t(design[,paste0('Proc', 2:4)]%*%t(alpha))
   return(newY)
 }
 
